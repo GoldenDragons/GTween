@@ -1,22 +1,23 @@
-# GTween 插件使用文档
+# ✨ GTween 插件使用文档
 
 <div align="center">
 
-### 让 Actor 动起来，就这么简单
+## 🎯 让 Actor 动起来，就这么简单
 
 **不写 Tick，不管状态，三行代码完成一个丝滑的路径动画。**  
 GTween 接管一切：生命周期、循环逻辑、空间变换，你只需要告诉它「去哪、用多久」。
 
 ---
 
-**链式调用** · **全托管生命周期** · **三种循环模式** · **UE 原生缓动函数**  
-**世界/局部空间** · **多段路径** · **自动清理** · **零样板代码**
+🔗 **链式调用** &nbsp;·&nbsp; 🛡️ **全托管生命周期** &nbsp;·&nbsp; ♾️ **三种循环模式** &nbsp;·&nbsp; 🎞️ **UE 原生缓动函数**
+
+🌍 **世界/局部空间** &nbsp;·&nbsp; 🛤️ **多段路径** &nbsp;·&nbsp; 🧹 **自动清理** &nbsp;·&nbsp; ⚡ **零样板代码**
 
 </div>
 
 ---
 
-## 30 秒上手
+## 🚀 30 秒上手
 
 ```cpp
 GTween->CreateTween(MyActor, Path)
@@ -26,13 +27,13 @@ GTween->CreateTween(MyActor, Path)
     .Play();
 ```
 
-> 就这些。Actor 开始来回运动，永不停止。
+> 💡 就这些。Actor 开始来回运动，永不停止。
 
 ---
 
 GTween 是一个轻量级的 Actor 运动补间插件，基于 `UEngineSubsystem` 实现，通过链式 API 驱动 Actor 沿多段路径做平滑运动，支持缓动函数、世界/局部空间、循环播放等功能。
 
-> 当前版本：**v1.0.0**
+> 📦 当前版本：**v1.0.0**
 
 ---
 
@@ -47,7 +48,7 @@ GTween 是一个轻量级的 Actor 运动补间插件，基于 `UEngineSubsystem
 
 ---
 
-## 接入方式
+## 📥 接入方式
 
 在需要使用 GTween 的模块 `Build.cs` 中添加依赖：
 
@@ -65,7 +66,7 @@ UGTweenSubsystem* GTween = GEngine->GetEngineSubsystem<UGTweenSubsystem>();
 
 ---
 
-## 基本用法
+## 📖 基本用法
 
 ### 单段运动（从当前位置运动到目标点）
 
@@ -106,11 +107,11 @@ GTween->CreateTween(MyActor, Path)
     .Play();
 ```
 
-> **注意**：循环模式下，`OnComplete` 仅在**所有循环全部完成**后触发，不会在每次循环结束时触发。
+> ⚠️ **注意**：循环模式下，`OnComplete` 仅在**所有循环全部完成**后触发，不会在每次循环结束时触发。
 
 ---
 
-## API 参考
+## 📚 API 参考
 
 ### `CreateTween(AActor* InActor, const TArray<FTransform>& InPath)`
 
@@ -145,7 +146,7 @@ GTween->CreateTween(MyActor, Path)
 
 ---
 
-## 循环播放
+## 🔁 循环播放
 
 通过 `SetLoop(int32 LoopCount, ETweenLoopMode Mode)` 设置。
 
@@ -195,17 +196,17 @@ GTween->CreateTween(MyActor, Path)
 
 ---
 
-## 注意事项
+## ⚠️ 注意事项
 
-1. **同一 Actor 同时只能有一个 Tween**：对同一 Actor 调用 `Play()` 时，会自动取消其当前正在进行的 Tween 任务。
-2. **Path 至少需要 1 个元素**：空路径会被直接忽略，Tween 不会注册。
-3. **Actor 被销毁时自动清理**：Tick 中会检测 `TargetActor` 的有效性，无效时自动移除对应 Tween。
-4. **Incremental 模式仅影响位置和旋转**：缩放在 Incremental 循环中保持原始路径值，不做累积叠加。
-5. **LoopCount = 0 时 SetLoop 的第二个参数无效**：单次播放不进入循环逻辑，`LoopMode` 不起作用。
+1. ✅ **同一 Actor 同时只能有一个 Tween**：对同一 Actor 调用 `Play()` 时，会自动取消其当前正在进行的 Tween 任务。
+2. ✅ **Path 至少需要 1 个元素**：空路径会被直接忽略，Tween 不会注册。
+3. ✅ **Actor 被销毁时自动清理**：Tick 中会检测 `TargetActor` 的有效性，无效时自动移除对应 Tween。
+4. ⚠️ **Incremental 模式仅影响位置和旋转**：缩放在 Incremental 循环中保持原始路径值，不做累积叠加。
+5. ⚠️ **LoopCount = 0 时 SetLoop 的第二个参数无效**：单次播放不进入循环逻辑，`LoopMode` 不起作用。
 
 ---
 
-## 版本历史
+## 📋 版本历史
 
 ### v1.0.0 (2026-03-11)
 
