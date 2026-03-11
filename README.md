@@ -1,5 +1,35 @@
 # GTween 插件使用文档
 
+<div align="center">
+
+### 让 Actor 动起来，就这么简单
+
+**不写 Tick，不管状态，三行代码完成一个丝滑的路径动画。**  
+GTween 接管一切：生命周期、循环逻辑、空间变换，你只需要告诉它「去哪、用多久」。
+
+---
+
+**链式调用** · **全托管生命周期** · **三种循环模式** · **UE 原生缓动函数**  
+**世界/局部空间** · **多段路径** · **自动清理** · **零样板代码**
+
+</div>
+
+---
+
+## 30 秒上手
+
+```cpp
+GTween->CreateTween(MyActor, Path)
+    .SetDuration(2.0f)
+    .SetEase(EEasingFunc::EaseInOut)
+    .SetLoop(-1, ETweenLoopMode::PingPong)
+    .Play();
+```
+
+> 就这些。Actor 开始来回运动，永不停止。
+
+---
+
 GTween 是一个轻量级的 Actor 运动补间插件，基于 `UEngineSubsystem` 实现，通过链式 API 驱动 Actor 沿多段路径做平滑运动，支持缓动函数、世界/局部空间、循环播放等功能。
 
 > 当前版本：**v1.0.0**
