@@ -2,6 +2,8 @@
 
 GTween 是一个轻量级的 Actor 运动补间插件，基于 `UEngineSubsystem` 实现，通过链式 API 驱动 Actor 沿多段路径做平滑运动，支持缓动函数、世界/局部空间、循环播放等功能。
 
+> 当前版本：**v1.0.0**
+
 ---
 
 ## 目录
@@ -11,6 +13,7 @@ GTween 是一个轻量级的 Actor 运动补间插件，基于 `UEngineSubsystem
 - [API 参考](#api-参考)
 - [循环播放](#循环播放)
 - [注意事项](#注意事项)
+- [版本历史](#版本历史)
 
 ---
 
@@ -169,3 +172,24 @@ GTween->CreateTween(MyActor, Path)
 3. **Actor 被销毁时自动清理**：Tick 中会检测 `TargetActor` 的有效性，无效时自动移除对应 Tween。
 4. **Incremental 模式仅影响位置和旋转**：缩放在 Incremental 循环中保持原始路径值，不做累积叠加。
 5. **LoopCount = 0 时 SetLoop 的第二个参数无效**：单次播放不进入循环逻辑，`LoopMode` 不起作用。
+
+---
+
+## 版本历史
+
+### v1.0.0 (2026-03-11)
+
+**初始版本发布**
+
+- 新增 `CreateTween(AActor*, TArray<FTransform>)` 基础补间创建接口
+- 新增多段路径运动支持，路径各段时长均分
+- 新增 `SetDuration` 设置总时长
+- 新增 `SetEase` 支持 UE 内置所有 `EEasingFunc` 缓动函数
+- 新增 `SetSpace` 支持世界坐标（`World`）与局部坐标（`Local`）两种运动空间
+- 新增 `SetLoop` 循环播放，支持三种模式：
+  - `Restart`：每次循环瞬移回起点重新正向播放
+  - `PingPong`：正向播完后反向播放，来回交替，无瞬移
+  - `Incremental`：每次循环在上次结束位置叠加相同偏移量继续运动
+- 新增 `OnComplete` 回调，在全部循环完成后触发
+- 同一 Actor 同时只保留一个 Tween，新建时自动取消旧任务
+- Actor 被销毁时自动清理对应 Tween
