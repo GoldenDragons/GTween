@@ -4,6 +4,26 @@
 #include "GTweenSubsystem.h"
 #include "Algo/Reverse.h"
 
+namespace
+{
+FTransform BlendTransform(const FTransform& StartTransform, const FTransform& EndTransform, float Alpha, ETweenRotationMode RotationMode)
+{
+    FTransform Result;
+    Result.SetLocation(FMath::Lerp(StartTransform.GetLocation(), EndTransform.GetLocation(), Alpha));
+    Result.SetScale3D(FMath::Lerp(StartTransform.GetScale3D(), EndTransform.GetScale3D(), Alpha));
+
+    const FQuat StartRotation = StartTransform.GetRotation();
+    const FQuat EndRotation = EndTransform.GetRotation();
+    FQuat BlendedRotation = RotationMode == ETweenRotationMode::FullPath
+        ? FQuat::SlerpFullPath(StartRotation, EndRotation, Alpha)
+        : FQuat::FastLerp(StartRotation, EndRotation, Alpha);
+    BlendedRotation.Normalize();
+    Result.SetRotation(BlendedRotation);
+
+    return Result;
+}
+}
+
 UGTweenSubsystem::FTweenBuilder UGTweenSubsystem::CreateTween(AActor* InActor, const TArray<FTransform>& InPath)
 {
     FTweenBuilder Builder;
@@ -13,6 +33,7 @@ UGTweenSubsystem::FTweenBuilder UGTweenSubsystem::CreateTween(AActor* InActor, c
     Builder.Data.TotalDuration = 1.0f;
     Builder.Data.EaseType = EEasingFunc::Linear;
     Builder.Data.Space = ETweenSpace::World; // 默认为世界空间
+    Builder.Data.RotationMode = ETweenRotationMode::FullPath;
     Builder.Data.OnComplete = nullptr;
 
     if (InActor)
@@ -67,8 +88,7 @@ void UGTweenSubsystem::Tick(float DeltaTime)
         
         float EasedAlpha = UKismetMathLibrary::Ease(0.f, 1.f, Alpha, T.EaseType);
         
-        FTransform CurrentTrans;
-        CurrentTrans.Blend(T.StartTransform, T.Path[T.CurrentIndex], EasedAlpha);
+        FTransform CurrentTrans = BlendTransform(T.StartTransform, T.Path[T.CurrentIndex], EasedAlpha, T.RotationMode);
 
         // --- 核心迭代：区分空间设置变换 ---
         if (T.Space == ETweenSpace::Local)

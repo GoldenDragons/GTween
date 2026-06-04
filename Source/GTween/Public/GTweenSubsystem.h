@@ -10,6 +10,13 @@
 UENUM(BlueprintType)
 enum class ETweenSpace : uint8 { World, Local };
 
+UENUM(BlueprintType)
+enum class ETweenRotationMode : uint8
+{
+	ShortestPath,
+	FullPath,
+};
+
 /** 循环播放模式 */
 UENUM(BlueprintType)
 enum class ETweenLoopMode : uint8
@@ -33,6 +40,7 @@ struct GTWEEN_API FActiveTween
 	float TotalDuration;
 	EEasingFunc::Type EaseType;
 	ETweenSpace Space;
+	ETweenRotationMode RotationMode = ETweenRotationMode::FullPath;
 	FTweenCompleteCallback OnComplete;
 
 	/** 循环次数：0=单次播放（默认），-1=无限循环，>0=固定循环次数 */
@@ -78,6 +86,7 @@ public:
 		FTweenBuilder& OnComplete(FTweenCompleteCallback InCallback) { Data.OnComplete = InCallback; return *this; }
 		
 		FTweenBuilder& SetSpace(ETweenSpace InSpace) { Data.Space = InSpace; return *this; }
+		FTweenBuilder& SetRotationMode(ETweenRotationMode InMode) { Data.RotationMode = InMode; return *this; }
 		/**
 		 * 设置循环播放
 		 * @param InLoopCount  0=单次（默认），-1=无限循环，>0=固定循环次数
